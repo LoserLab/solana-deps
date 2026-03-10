@@ -104,15 +104,18 @@ console.log(formatJson(result));
 - `0` clean tree
 - `1` legacy packages found
 
-## Related tools
+## Part of the Solana Migration Toolkit
+
+Four tools that work together to get your project from web3.js v1 to Kit v2:
 
 | Tool | What it does |
 |------|-------------|
-| [solana-audit](https://github.com/LoserLab/solana-audit) | Catches CVEs and deprecated APIs that `npm audit` misses |
+| **solana-deps** (this tool) | Trace why legacy packages are in your tree |
+| [solana-audit](https://github.com/LoserLab/solana-audit) | Catch CVEs and deprecated APIs that `npm audit` misses |
 | [solana-codemod](https://github.com/LoserLab/solana-codemod) | Auto-migrate code from web3.js v1 to Kit v2 |
 | [bigint-buffer-safe](https://github.com/LoserLab/bigint-buffer-safe) | Drop-in CVE fix for bigint-buffer |
 
-**Recommended workflow:** `solana-deps` (find what's legacy) -> `solana-codemod` (fix the code) -> `solana-audit` (verify the result).
+**Recommended workflow:** `solana-deps` (find what's legacy) -> `solana-audit` (check for vulnerabilities) -> `solana-codemod` (fix the code) -> `solana-audit` (verify the result).
 
 ## Author
 
