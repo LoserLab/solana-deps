@@ -1,0 +1,53 @@
+{
+  "name": "solana-deps",
+  "version": "0.1.0",
+  "description": "Trace why @solana/web3.js v1 is in your dependency tree. Find every transitive path pulling in legacy Solana packages and get a fix for each.",
+  "bin": {
+    "solana-deps": "./dist/bin/solana-deps.js"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "solana",
+    "dependencies",
+    "web3.js",
+    "solana-kit",
+    "migration",
+    "transitive",
+    "dependency-tree",
+    "v1",
+    "v2"
+  ],
+  "author": "heathen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LoserLab/solana-deps"
+  },
+  "dependencies": {
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^3.0.0"
+  }
+}

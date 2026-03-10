@@ -1,0 +1,82 @@
+# solana-deps
+
+> Trace why legacy Solana packages are in your dependency tree.
+
+solana-deps scans your project's package.json and package-lock.json to find every path that pulls in deprecated or legacy Solana packages like @solana/web3.js v1, bigint-buffer, @project-serum/*, @metaplex-foundation/js, and more. It shows the full dependency chain so you know exactly which package is responsible and what to migrate to.
+
+## When to use this tool
+
+- You want to migrate from @solana/web3.js v1 to @solana/kit (v2) but need to know what's holding you back
+- You suspect transitive dependencies are pulling in legacy Solana packages
+- You want to identify which direct dependencies are the biggest blockers to a clean v2 migration
+- You need a CI check to prevent new legacy Solana packages from entering your tree
+
+## Installation
+
+```bash
+npm install -g solana-deps
+```
+
+## CLI Usage
+
+```bash
+# Scan current directory
+solana-deps
+
+# Scan a specific project
+solana-deps /path/to/project
+
+# JSON output (for CI/tooling)
+solana-deps --json
+
+# Only show direct dependencies
+solana-deps --direct-only
+```
+
+## Programmatic Usage
+
+```typescript
+import { trace, formatHuman, formatJson } from "solana-deps";
+
+const result = trace("/path/to/project");
+
+// result.traces - array of legacy packages found with dependency chains
+// result.hotspots - packages pulling in the most legacy deps
+// result.totalDeps - total packages scanned
+// result.directDeps - direct dependency count
+
+console.log(formatHuman(result));
+```
+
+## What it detects
+
+| Package | Status | Migrate to |
+|---------|--------|-----------|
+| @solana/web3.js | Maintenance mode | @solana/kit (v2) |
+| bigint-buffer | CVE-2025-3194 | bigint-buffer-safe |
+| @solana/buffer-layout-utils | Pulls in CVE | @solana/codecs |
+| @project-serum/anchor | Archived | @coral-xyz/anchor |
+| @project-serum/serum | Defunct | @openbook-dex/openbook-v2 |
+| @project-serum/sol-wallet-adapter | Archived | @solana/wallet-adapter-base |
+| @solana/spl-token | Legacy | @solana-program/token |
+| @metaplex-foundation/js | Deprecated | @metaplex-foundation/umi |
+| @metaplex-foundation/mpl-token-metadata | Legacy versions | v3+ with Umi |
+| @solana/wallet-adapter-react | Built on v1 | @solana/connector |
+
+## Output format
+
+The tool outputs:
+1. **Direct dependencies** - legacy packages you installed yourself, with migration guidance
+2. **Transitive dependencies** - legacy packages pulled in by others, with the full chain (e.g., `(root) > @coral-xyz/anchor > @solana/web3.js`)
+3. **Hotspots** - which of your direct dependencies pull in the most legacy packages (fix these first)
+
+## Exit codes
+
+- `0` - no legacy Solana packages found
+- `1` - legacy packages detected
+
+## Related tools
+
+- [solana-audit](https://github.com/LoserLab/solana-audit) - Catches CVEs and deprecated APIs that npm audit misses
+- [solana-codemod](https://github.com/LoserLab/solana-codemod) - Automated migration from @solana/web3.js v1 to @solana/kit
+- [bigint-buffer-safe](https://github.com/LoserLab/bigint-buffer-safe) - Drop-in fix for CVE-2025-3194
