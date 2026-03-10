@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>solana-deps social card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: 1200px;
+    height: 628px;
+    background: #08080C;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 80px 64px 80px;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 163, 26, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 163, 26, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .top-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #FFA31A 0%, #9945FF 50%, #14F195 100%);
+    z-index: 10;
+  }
+
+  .glow-top {
+    position: absolute;
+    top: -180px;
+    left: 30%;
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255, 163, 26, 0.1) 0%, rgba(153, 69, 255, 0.04) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .glow-corner {
+    position: absolute;
+    bottom: -80px;
+    right: -60px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(20, 241, 149, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Dependency tree background */
+  .tree-bg {
+    position: absolute;
+    top: 32px;
+    right: 50px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.05);
+    white-space: pre;
+    pointer-events: none;
+    z-index: 2;
+    user-select: none;
+  }
+
+  .tree-bg .node-amber {
+    color: rgba(255, 163, 26, 0.09);
+  }
+
+  .tree-bg .node-red {
+    color: rgba(255, 60, 60, 0.08);
+  }
+
+  .brand {
+    position: absolute;
+    top: 40px;
+    left: 80px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .brand-line {
+    width: 32px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .brand-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #FFA31A;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .badge {
+    position: absolute;
+    top: 36px;
+    right: 80px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border: 1px solid rgba(255, 163, 26, 0.3);
+    border-radius: 100px;
+    background: rgba(255, 163, 26, 0.06);
+  }
+
+  .badge-dot {
+    width: 5px;
+    height: 5px;
+    background: #FFA31A;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255, 163, 26, 0.5);
+  }
+
+  .badge-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFA31A;
+    letter-spacing: 0.08em;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .chain-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .chain-node {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .chain-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 163, 26, 0.5);
+  }
+
+  .chain-target {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FF4444;
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 68, 68, 0.4);
+  }
+
+  .title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+
+  .title .dim {
+    color: rgba(255, 255, 255, 0.25);
+  }
+
+  .title .accent {
+    background: linear-gradient(135deg, #FFA31A, #FF6B1A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.35);
+    line-height: 1.5;
+  }
+
+  .bottom-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .pills {
+    display: flex;
+    gap: 8px;
+  }
+
+  .pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+  }
+
+  .pill-amber {
+    background: rgba(255, 163, 26, 0.08);
+    border: 1px solid rgba(255, 163, 26, 0.25);
+    color: #FFA31A;
+  }
+
+  .pill-purple {
+    background: rgba(153, 69, 255, 0.08);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    color: rgba(153, 69, 255, 0.8);
+  }
+
+  .repo-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.2);
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid"></div>
+  <div class="top-line"></div>
+  <div class="glow-top"></div>
+  <div class="glow-corner"></div>
+
+  <div class="tree-bg"><span class="node-amber">my-app</span>
+├── <span class="node-amber">@coral-xyz/anchor</span>
+│   └── <span class="node-red">@solana/web3.js</span>
+│       ├── <span class="node-red">bigint-buffer</span>
+│       └── <span class="node-red">@solana/buffer-layout-utils</span>
+│           └── <span class="node-red">bigint-buffer</span>
+├── <span class="node-amber">@metaplex-foundation/js</span>
+│   ├── <span class="node-red">@solana/web3.js</span>
+│   ├── <span class="node-red">@solana/spl-token</span>
+│   │   └── <span class="node-red">@solana/web3.js</span>
+│   └── <span class="node-red">@metaplex-foundation/mpl-token-metadata</span>
+│       └── <span class="node-red">@solana/web3.js</span>
+└── @solana/kit
+    └── (clean)</div>
+
+  <div class="brand">
+    <span class="brand-name">heathen</span>
+    <div class="brand-line"></div>
+    <span class="brand-type">Open Source</span>
+  </div>
+
+  <div class="badge">
+    <div class="badge-dot"></div>
+    <span class="badge-text">DEPENDENCY TRACER</span>
+  </div>
+
+  <div class="content">
+    <div class="chain-block">
+      <span class="chain-node">(root)</span>
+      <span class="chain-arrow">&gt;</span>
+      <span class="chain-node">@coral-xyz/anchor</span>
+      <span class="chain-arrow">&gt;</span>
+      <span class="chain-target">@solana/web3.js</span>
+    </div>
+
+    <div>
+      <div class="title">solana<span class="dim">-</span><span class="accent">deps</span></div>
+      <div class="subtitle">Trace why legacy Solana packages are in your dependency tree.</div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="pills">
+        <span class="pill pill-amber">BFS Trace</span>
+        <span class="pill pill-amber">10 Targets</span>
+        <span class="pill pill-purple">16 Tests</span>
+        <span class="pill pill-purple">CI-Ready</span>
+        <span class="pill pill-purple">MIT License</span>
+      </div>
+      <span class="repo-link">github.com/LoserLab/solana-deps</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,5 +1,9 @@
 # solana-deps
 
+<p align="center">
+  <img src="social/card.png" alt="solana-deps" width="100%">
+</p>
+
 Trace why legacy Solana packages are in your dependency tree.
 
 `solana-deps` scans your `package.json` and `package-lock.json` to find every path that pulls in deprecated Solana packages. It shows the full dependency chain so you know exactly which package is responsible and what to migrate to.
