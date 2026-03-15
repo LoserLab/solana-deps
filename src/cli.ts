@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { trace } from "./tracer";
 import { formatHuman, formatJson } from "./reporter";
 
-export async function cli(argv: string[]): Promise<void> {
+export function cli(argv: string[]): void {
   const program = new Command();
 
   program
@@ -37,8 +37,9 @@ export async function cli(argv: string[]): Promise<void> {
         if (result.traces.length > 0) {
           process.exit(1);
         }
-      } catch (err: any) {
-        console.error(`Error: ${err.message}`);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(`Error: ${msg}`);
         process.exit(1);
       }
     });
